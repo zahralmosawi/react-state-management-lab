@@ -87,21 +87,27 @@ const App = () => {
   },
 ])
 
+function handleAddFighter(fighter){
+  const newTeam = [...team, fighter]
+  setTeam(newTeam)
+  console.log(newTeam) 
+}
+
   return (
     <>
     <h1>Zombie Fighters</h1>
-    <h3>Money: {money}</h3>
+    <h2>Money: {money}</h2>
     <ul>
       {
         zombieFighters.map((zombie, index)=>{
           return <>
-          <li>
-            <img src={zombie.img} alt="" /> <br />
-            {zombie.name} <br />
-            Price: {zombie.price} <br />
-            Strength: {zombie.strength} <br />
-            Agility: {zombie.agility} <br />
-            <button>Add</button>
+          <li key={index}>
+            <img src={zombie.img} alt="zombie" />
+            <h3>{zombie.name}</h3>
+            <p>Price: {zombie.price}</p>
+            <p>Strength: {zombie.strength}</p>
+            <p>Agility: {zombie.agility} </p>
+            <button onClick={handleAddFighter}>Add</button>
           </li>
           </>
         })
