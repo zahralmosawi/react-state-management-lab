@@ -87,27 +87,64 @@ const App = () => {
   },
 ])
 
+let totalStrength = 0
+for(const f of team){
+  totalStrength += f.strength
+}
+
+const totalAgility = team.reduce((sum, fighter) => sum + fighter.agility, 0)
+
 function handleAddFighter(fighter){
+  if(money < fighter.price){
+    alert('Not enough money')
+    return
+  }
   const newTeam = [...team, fighter]
   setTeam(newTeam)
   console.log(newTeam) 
+  setZombieFighters(zombieFighters.filter(f => f.id !== fighter.id))
+  setMoney(f => f - fighter.price)
+}
+
+
+function handleRemoveFighter(fighter){
+  setTeam((previous) => previous.filter(p => p.id !== fighter.id))
+  setZombieFighters((previous)=>[...previous, fighter])
+  setMoney(p => p + fighter.price)
 }
 
   return (
     <>
     <h1>Zombie Fighters</h1>
     <h2>Money: {money}</h2>
+    <h2>Team Strength: {totalStrength}</h2>
+    <h2>Team Agility: {totalAgility}</h2>
+    <h2>Team</h2>
+    {
+      team.length === 0 ? (<p>Pick some team members!</p>) : team.map((team)=>(
+        <ul>
+          <li key={team.id}>
+            <img src={team.img} alt={team.name} />
+            <h3>{team.name}</h3>
+            <p>Price: {team.price}</p>
+            <p>Strength: {team.strength}</p>
+            <p>Agility: {team.agility}</p>
+            <button onClick={()=>handleRemoveFighter(team)}>Remove</button>
+          </li>
+        </ul>
+      ))
+    }
     <ul>
       {
-        zombieFighters.map((zombie, index)=>{
+        zombieFighters.map((zombie)=>{
           return <>
-          <li key={index}>
-            <img src={zombie.img} alt="zombie" />
+          <li key={zombie.id}>
+            <img src={zombie.img} alt={zombie.name} />
             <h3>{zombie.name}</h3>
             <p>Price: {zombie.price}</p>
             <p>Strength: {zombie.strength}</p>
             <p>Agility: {zombie.agility} </p>
-            <button onClick={handleAddFighter}>Add</button>
+            <button onClick={()=>handleAddFighter(zombie)}>Add</button>
           </li>
           </>
         })
